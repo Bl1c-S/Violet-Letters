@@ -1,18 +1,20 @@
 "use client";
-import AddLetterForm from "@/app/letter/add/components/addLetterForm";
+
 import React, { useEffect } from "react";
+import LoginForm from "@/app/login/components/loginForm";
 import { useMainContext } from "@/app/components/contexts/mainContext";
 
-const WriteLetter = () => {
+const Login = () => {
   const { setBgUrl } = useMainContext();
   useEffect(() => {
-    setBgUrl("/assets/violet1.png");
+    setBgUrl("/assets/violet2.png");
   }, []);
+
   return (
     <div className="min-h-screen content-center justify-center bg-cover">
-      <AddLetterForm />
+      <LoginForm />
     </div>
   );
 };
 
-export default WriteLetter;
+export default Login;

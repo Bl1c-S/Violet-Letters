@@ -1,9 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { addLetter } from "@/backend/letterController";
+import { addLetter, Letter } from "@/backend/database/letterDbManager";
 
 export async function POST(request: NextRequest) {
   const res = await request.json();
+  const id = crypto.randomUUID();
   console.log(res);
-  addLetter(res.title, res.description);
-  return Response.json({ letter: res.title, status: "added" });
+  const letter: Letter = {
+    user_id: res.user_id,
+    id: id,
+    title: res.title,
+    description: res.description,
+  };
+  await addLetter(letter);
+  return Response.json({}, { status: 200 });
 }

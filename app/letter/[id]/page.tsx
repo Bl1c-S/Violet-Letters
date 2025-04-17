@@ -1,7 +1,7 @@
 "use client";
 import dynamic from "next/dynamic";
-import React from "react";
-// import EditLetterForm from "@/app/letter/[id]/components/editLetterForm";
+import React, { useEffect } from "react";
+import { useMainContext } from "@/app/components/contexts/mainContext";
 
 const EditLetterForm = dynamic(
   () => import("@/app/letter/[id]/components/editLetterForm"),
@@ -10,21 +10,13 @@ const EditLetterForm = dynamic(
   },
 );
 
-export type Letter = {
-  id: number;
-  title: string;
-  description: string;
-};
-
 export default function LetterPage({ params }: { params: { id: string } }) {
+  const { setBgUrl } = useMainContext();
+  useEffect(() => {
+    setBgUrl("/assets/violet1.png");
+  }, []);
   return (
-    <div
-      className="min-h-screen content-center justify-center bg-cover"
-      style={{ backgroundImage: 'url("/assets/violet2.png")' }}
-    >
-      <h1 className="text-center font-semibold text-4xl">
-        Please amend your letter...
-      </h1>
+    <div className="min-h-screen content-center justify-center bg-cover">
       <EditLetterForm params={params} />
     </div>
   );

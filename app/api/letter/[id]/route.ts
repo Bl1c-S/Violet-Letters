@@ -1,33 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
   getLetter,
+  Letter,
   removeLetter,
   updateLetter,
-} from "@/backend/letterController";
+} from "@/backend/database/letterDbManager";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } },
 ) {
   const { id } = params;
-  console.log(`try get letter by id: ${id}`);
+  console.log(`Попытка получения письма: ${id}`);
 
   if (!id) {
-    return NextResponse.json({ status: "ID is required" }, { status: 400 });
+    return NextResponse.json({ status: "ID не указан." }, { status: 400 });
   }
 
-  const parsedId = parseInt(id, 10);
-  if (isNaN(parsedId)) {
-    return NextResponse.json({ status: `Invalid ID: ${id}` }, { status: 400 });
-  }
-
-  const letter = getLetter(parsedId);
+  const letter = await getLetter(id);
 
   if (letter) {
     return NextResponse.json({ letter });
   } else {
     return NextResponse.json(
-      { status: `Letter with id: ${id} not found` },
+      { status: `Письмо: ${id} не найдено.` },
       { status: 404 },
     );
   }
@@ -38,29 +34,20 @@ export async function DELETE(
   { params }: { params: { id: string } },
 ) {
   const { id } = params;
-  console.log(`Try delete letter by id: ${id}`);
+  console.log(`Попытка удаления письма: ${id}`);
 
-  if (!id) {
-    return NextResponse.json({ status: "ID is required" }, { status: 400 });
-  }
-
-  const parsedId = parseInt(id, 10);
-  if (isNaN(parsedId)) {
-    return NextResponse.json({ status: `Invalid ID: ${id}` }, { status: 400 });
-  }
-
-  const isRemoved = removeLetter(parsedId);
+  const isRemoved = await removeLetter(id);
 
   if (isRemoved) {
-    console.log(`Letter id: ${id} deleted`);
+    console.log(`Письмо: ${id} удалено.`);
     return NextResponse.json(
-      { status: `Letter with id: ${id} removed` },
+      { status: `Письмо: ${id} удалено.` },
       { status: 200 },
     );
   } else {
-    console.log(`Letter with id: ${id} not found`);
+    console.log(`Письмо: ${id} не найдено.`);
     return NextResponse.json(
-      { status: `Letter with id: ${id} not found` },
+      { status: `Письмо: ${id} не найдено.` },
       { status: 404 },
     );
   }
@@ -68,40 +55,30 @@ export async function DELETE(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: { id: Letter } },
 ) {
-  const { id } = params;
-  console.log(`Try update letter by id: ${id}`);
+  const { letter } = await request.json();
+  console.log(`Попытка обновления письма: ${letter.id}`);
 
-  if (!id) {
-    return NextResponse.json({ status: "ID is required" }, { status: 400 });
-  }
-
-  const parsedId = parseInt(id, 10);
-  if (isNaN(parsedId)) {
-    return NextResponse.json({ status: `Invalid ID: ${id}` }, { status: 400 });
-  }
-
-  const { title, description } = await request.json();
-  if (!title || !description) {
+  if (!letter.title || !letter.description) {
     return NextResponse.json(
-      { status: "Title and description are required" },
+      { status: "Название или контент не указан." },
       { status: 400 },
     );
   }
 
-  const isUpdated = updateLetter(parsedId, title, description);
+  const isUpdated = await updateLetter(letter);
 
   if (isUpdated) {
-    console.log(`Letter id: ${id} updated`);
+    console.log(`Письмо: ${letter.id} обновлено.`);
     return NextResponse.json(
-      { status: `Letter with id: ${id} updated` },
+      { status: `Письмо: ${letter.id} обновлено.` },
       { status: 200 },
     );
   } else {
-    console.log(`Letter with id: ${id} not found`);
+    console.log(`Письмо: ${letter.id} не найдено.`);
     return NextResponse.json(
-      { status: `Letter with id: ${id} not found` },
+      { status: `Письмо: ${letter.id} не найдено.` },
       { status: 404 },
     );
   }
