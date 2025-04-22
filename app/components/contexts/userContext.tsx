@@ -15,7 +15,7 @@ import authorization, {
   REFRESH_TOKEN,
   getBasicToken,
   getRefreshToken,
-} from "@/app/login/components/authorization";
+} from "@/app/login/components/Authorization";
 
 interface UserContextType {
   user: User | null;

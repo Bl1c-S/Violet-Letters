@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { DbUser, getUser, ParsToUser } from "@/backend/database/userDbManager";
-import { apiTokenVerification } from "@/app/api/authorization/apiTokenVerifycation";
+import { apiTokenVerification } from "@/app/api/authorization/apiTokenVerification";
 
 export async function GET(request: NextRequest) {
   const response = await apiTokenVerification(request);

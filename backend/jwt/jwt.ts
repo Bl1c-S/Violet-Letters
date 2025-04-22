@@ -1,4 +1,4 @@
-import { getSecretKey } from "@/backend/cryptonit";
+import { getSecretKey } from "@/backend/cryptoUtils";
 import jwt from "jsonwebtoken";
 
 export const createNewToken = async (data: object, lifetime: string) => {

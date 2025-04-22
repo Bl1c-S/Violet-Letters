@@ -1,4 +1,4 @@
-import { verifyPassword } from "@/backend/cryptonit";
+import { verifyPassword } from "@/backend/cryptoUtils";
 import { NextRequest, NextResponse } from "next/server";
 import { getUser } from "@/backend/database/userDbManager";
 import { createTokens } from "@/app/api/authorization/refresh/route";
