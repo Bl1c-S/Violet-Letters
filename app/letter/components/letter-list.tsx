@@ -13,20 +13,23 @@ const LettersList = () => {
     const {user} = useUser();
 
     useEffect(() => {
+        let isActive = true;
         const fetchLetters = async () => {
             if (!user) return;
-
             try {
                 const fetchedLetters = await getAllLetters();
-                setLetters(fetchedLetters);
+                if (isActive) setLetters(fetchedLetters);
             } catch (err) {
-                setError("Ошибка загрузки писем");
+                const errorMessage = err instanceof Error ? err.message : "Неизвестная ошибка";
+                setError(`Ошибка загрузки писем: ${errorMessage}`);
+                console.error("Ошибка при загрузке писем:", err);
             } finally {
-                setLoading(false);
+                if (isActive) setLoading(false);
             }
         };
-
-        fetchLetters();
+        setLoading(true);
+        void fetchLetters();
+        isActive = false;
     }, [user]);
 
     const handleDelete = async (id: string) => {
